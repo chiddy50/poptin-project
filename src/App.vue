@@ -1,7 +1,7 @@
 <template>
   <div class="main overflow-x-hidden">
     <div class="grid grid-cols-6">
-      <div @dragover="dragOver" @drop="drop" 
+      <div  
       class=" col-span-1 bg-gray-200 min-h-screen px-3">
 
         <h2 class="text-gray-500 text-2xl py-4 border-b border-gray-400 font-bold">Poptin Editor</h2>
@@ -52,7 +52,7 @@
 
         <div class="mt-4">
           <p class="text-xs">Background</p>
-          <input type="color" @change="changeBackground" v-model="background" id="" class="w-full">
+          <input type="color" v-model="background" id="" class="w-full">
         </div>
 
         <div class="flex flex-wrap gap-3 my-5">
@@ -82,39 +82,47 @@
 
       </div>
       
-      <div  
+      <div
       id="canvas__container" 
       class="col-span-5 min-h-screen p-4 relative">
         
+      <div @dragover="dragOver" @drop="drop" 
+      id="drop__area" 
+      style="top:0;left:0;position:absolute; border-bottom-right-radius: 30%;display: none;" 
+      class="bg-red-200 pl-2 pr-5 py-5">
+        <i class='bx bx-trash text-6xl'></i>
+        <p class="text-xs">Drag here to remove</p>
+      </div>
+      <!-- @mousedown="dragMouseDown"  -->
       <div 
-      @mousedown="dragMouseDown" 
-        id="canvas_box" class="canvas_box cursor-move mx-auto p-4" 
+        id="canvas_box" class="canvas_box mx-auto p-4" 
           style="width: 500px; height: 500px; border-radius: 50%; background:  #ff6464;position: absolute;
           top: 50%; left: 50%; transform: translate(-50%, -50%);">
           <div class="h-full w-full border-2 border-white relative" style="border-radius: 50%;">
-            <div class="flex justify-center mt-5">
+            
+            <div draggable @mouseleave="unhightlight" @mouseover="hightlight" @dragstart="dragStart" class="flex cursor-grab justify-center mt-5">
               <i class='bx bxs-star text-4xl text-red-800' style=""></i>
               <i class='bx bxs-star text-4xl text-red-800' style=""></i>
               <i class='bx bxs-star text-4xl text-red-800' style=""></i>
             </div>
 
-            <div draggable @dragstart="dragStart" @click="selectElem" class="mt-10 cursor-grab mx-auto w-4/6">
+            <div draggable @mouseleave="unhightlight" @mouseover="hightlight" @dragstart="dragStart" class="mt-10 cursor-grab mx-auto w-4/6">
               <h2 class="text-white font-bold text-xl text-center">
                 All the text and elements in this popup should be editable and dragable
               </h2>
             </div>
             
-            <div class="mt-4 cursor-grab mx-auto w-4/6">
+            <div draggable @mouseleave="unhightlight" @mouseover="hightlight" @dragstart="dragStart" class="mt-4 cursor-grab mx-auto w-4/6">
               <input type="text" placeholder="Email" class="w-full mt-4 rounded-lg py-2 px-4">
             </div>
 
-            <div class="mt-4 cursor-grab mx-auto w-4/6">
+            <div draggable @mouseleave="unhightlight" @mouseover="hightlight" @dragstart="dragStart" class="mt-4 cursor-grab mx-auto w-4/6">
               <button class="mt-4 bg-black w-full text-white px-5 py-3 text-xl font-bold rounded-lg">
                   SIGN UP NOW
               </button>
             </div>
 
-            <div class="mt-2 cursor-grab mx-auto w-4/6">
+            <div draggable @mouseleave="unhightlight" @mouseover="hightlight" @dragstart="dragStart" class="mt-2 cursor-grab mx-auto w-4/6">
               <p class="text-center text-sm text-white">
                 No credit card required. No surprises
               </p>
@@ -242,8 +250,13 @@ export default {
 
     }
 
-    const changeBackground = (e) => {
-      console.log(e);
+    const hightlight = (e) => {
+      let element = !e.target.draggable ? e.target.parentElement : e.target
+      element.style.border = '1px dashed';        
+    }
+
+    const unhightlight = (e) => {
+      e.target.style.border = 'none';
     }
 
     const watchWidth = (value, initialWidth) => {
@@ -261,28 +274,24 @@ export default {
     }
 
     const dragStart = (event) => {
-      console.log(event);
       draggable.value = event
+      console.log(draggable.value.target);
+      document.getElementById('drop__area').style.display = 'block'
+
       // Store the initial position of the dragged element
       event.dataTransfer.setData('text/plain', JSON.stringify({ x: event.clientX, y: event.clientY }));
     };
     const dragOver = (event) => {
-        // Prevent default behavior to enable dropping
-        event.preventDefault();
-        
+      // Prevent default behavior to enable dropping
+      event.preventDefault();
+
     };
-
+      
     const drop = (event) => {
-      // Get the stored position from the dataTransfer object
-      const storedPosition = JSON.parse(event.dataTransfer.getData('text/plain'));
-
-      // // Calculate the offset between the initial and current positions
-      // const offsetX = event.clientX - storedPosition.x;
-      // const offsetY = event.clientY - storedPosition.y;
-  
-      // // Update the position of the dragged element
-      // position.x += offsetX;
-      // position.y += offsetY;
+      console.log(draggable.value.target.id);
+      // document.getElementById(draggable.value.id).remove()
+      draggable.value.target.remove()
+      document.getElementById('drop__area').style.display = 'none'
     };
 
     watch(width, (newValue, oldValue) => {
@@ -319,7 +328,6 @@ export default {
       handleWidthChange,
       handleHeightChange,
       createCanvas,
-      changeBackground,
 
       dragMouseDown,
       elementDrag,
@@ -327,6 +335,8 @@ export default {
       dragStart,
       dragOver,
       drop,
+      hightlight,
+      unhightlight
     };
   },
 
