@@ -1,8 +1,9 @@
 <template>
   <div class="main overflow-x-hidden">
-    <div class="grid grid-cols-6">
+    <div class="grid grid-cols-12">
+
       <div  
-      class=" col-span-1 bg-gray-200 min-h-screen px-3">
+      class=" col-span-2 bg-gray-200 min-h-screen px-3">
 
         <h2 class="text-gray-500 text-2xl py-4 border-b border-gray-400 font-bold">Poptin Editor</h2>
         
@@ -84,23 +85,24 @@
       
       <div
       id="canvas__container" 
-      class="col-span-5 min-h-screen p-4 relative">
+      class="col-span-6 min-h-screen p-4 relative">
         
-      <div @dragover="dragOver" @drop="drop" 
-      id="drop__area" 
-      style="top:0;left:0;position:absolute; border-bottom-right-radius: 30%;display: none;" 
-      class="bg-red-200 pl-2 pr-5 py-5">
-        <i class='bx bx-trash text-6xl'></i>
-        <p class="text-xs">Drag here to remove</p>
-      </div>
-      <!-- @mousedown="dragMouseDown"  -->
-      <div 
-        id="canvas_box" class="canvas_box mx-auto p-4" 
+        <!-- <div
+        id="drop__area" 
+        style="top:0;left:0;position:absolute; border-bottom-right-radius: 30%;display: none;" 
+        class="bg-red-200 pl-2 pr-5 py-5">
+          <i class='bx bx-trash text-6xl'></i>
+          <p class="text-xs">Drag here to remove</p>
+        </div> -->
+
+        <!-- @mousedown="dragMouseDown"  -->
+        <div 
+          id="canvas_box" class="canvas_box mx-auto p-4" 
           style="width: 500px; height: 500px; border-radius: 50%; background:  #ff6464;position: absolute;
           top: 50%; left: 50%; transform: translate(-50%, -50%);">
           <div class="h-full w-full border-2 border-white relative" style="border-radius: 50%;">
             
-            <div draggable @mouseleave="unhightlight" @mouseover="hightlight" @dragstart="dragStart" class="flex cursor-grab justify-center mt-5">
+            <div draggable @mouseleave="unhightlight" @mouseover="hightlight" @mouseenter="hightlight" @dragstart="dragStart" class="flex cursor-grab justify-center mt-5">
               <i class='bx bxs-star text-4xl text-red-800' style=""></i>
               <i class='bx bxs-star text-4xl text-red-800' style=""></i>
               <i class='bx bxs-star text-4xl text-red-800' style=""></i>
@@ -133,6 +135,11 @@
         </div>
         
       </div>
+
+      <div  @dragover="dragOver" @drop="drop" class="col-span-4 bg-gray-400">
+        
+      </div>
+      
 
     </div>
   </div>
@@ -276,7 +283,7 @@ export default {
     const dragStart = (event) => {
       draggable.value = event
       console.log(draggable.value.target);
-      document.getElementById('drop__area').style.display = 'block'
+      // document.getElementById('drop__area').style.display = 'block'
 
       // Store the initial position of the dragged element
       event.dataTransfer.setData('text/plain', JSON.stringify({ x: event.clientX, y: event.clientY }));
@@ -291,7 +298,7 @@ export default {
       console.log(draggable.value.target.id);
       // document.getElementById(draggable.value.id).remove()
       draggable.value.target.remove()
-      document.getElementById('drop__area').style.display = 'none'
+      // document.getElementById('drop__area').style.display = 'none'
     };
 
     watch(width, (newValue, oldValue) => {
