@@ -1,0 +1,75 @@
+/* #canvas {
+    width: 100%;
+    background-color: #fff;
+    height: 100%;
+}  */
+
+.dashed__border {
+    outline: 1px dashed #3232ff;
+}
+
+.canvas__empty .move {
+    top: -10px;
+    right: -10px;
+}
+
+.action__box {
+    border-radius: 10px;
+    width: 24px;
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+
+    transition: height 0.5s;
+    -webkit-transition: height 0.5s;
+    overflow: hidden;
+    transition: 0.5s;
+    z-index: 112;
+}
+
+.action__box:hover {
+    width: max-content;
+}
+
+.action__box button{
+    font-size: 11px;
+    padding: 5px 10px;
+    width: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.action__box .select {
+    background-color: #034ff5;
+}
+.action__box .select:hover {
+    background-color: #5085fa;
+}
+
+.action__box .add {
+    background-color: #454647;
+}
+.action__box .add:hover {
+    background-color: #707070;
+}
+
+
+.action__box .update {
+    background-color: #11de02;
+}
+.action__box .update:hover {
+    background-color: #8af183;
+}
+
+.action__box .delete {
+    background-color: #e01a1a;
+}
+.action__box .delete:hover {
+    background-color: #ff5454;
+}
+
+.canvas__empty {
+    @apply w-full flex flex-col items-center justify-center text-xs text-blue-500 bg-blue-100;
+    /* border: 1px dashed #4638ff; */
+}
